@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de livros</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Catálogo de livros</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>ISBN</th>
+          <th>Páginas</th>
+          <th>Ano</th>
+          <th>Val</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% livros.forEach(livro => { %>
+          <tr>
+            <td><%= livro.titulo %></td>
+            <td><%= livro.autor %></td>
+            <td><%= livro.isbn %></td>
+            <td><%= livro.paginas %></td>
+            <td><%= livro.ano %></td>
+            <td>R$ <%= livro.valor.toFixed(2) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <a href="/?page=1" class="<%= currentPage == 1 ? 'disabled' : '' %>"><<<</a>
+      <a href="/?page=<%= currentPage > 1 ? currentPage - 1 : 1 %>" class="<%= currentPage == 1 ? 'disabled' : '' %>"><<</a>
+      <% 
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
+        if (endPage - startPage < 4) {
+          if (startPage === 1) {
+            endPage = Math.min(totalPages, startPage + 4);
+          } else if (endPage === totalPages) {
+            startPage = Math.max(1, endPage - 4);
+          }
+        }
+      %>
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <a href="/?page=<%= i %>" class="<%= i == currentPage ? 'active' : '' %>"><%= i %></a>
+      <% } %>
+      <a href="/?page=<%= currentPage < totalPages ? currentPage + 1 : totalPages %>" class="<%= currentPage == totalPages ? 'disabled' : '' %>">>></a>
+      <a href="/?page=<%= totalPages %>" class="<%= currentPage == totalPages ? 'disabled' : '' %>">>>></a>
+    </div>
+    <p>Exibindo de <%= startIndex %> até <%= endIndex %> de <%= count %> livros</p>
+  </div>
+</body>
+</html>
